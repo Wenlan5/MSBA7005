@@ -1,134 +1,193 @@
 <!DOCTYPE html>
-<html style="height: 100%">
-   <head>
-       <meta charset="utf-8">
-   </head>
-   <body style="height: 100%; margin: 0">
-       <div id="container" style="height: 100%"></div>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
-       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
-       <script type="text/javascript">
-var dom = document.getElementById("container");
-var myChart = echarts.init(dom);
-var app = {};
-option = null;
-var canvas = document.createElement('canvas');
-var mapChart = echarts.init(canvas, null, {
-    width: 2048,
-    height: 1024
-});
+<html lang="en">
 
-mapChart.setOption({
-    backgroundColor: '#999',
-    geo: {
-        type: 'map',
-        map: 'world',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        boundingCoords: [[-180, 90], [180, -90]],
-        silent: true,
-        itemStyle: {
-            normal: {
-                borderColor: '#000'
-            }
-        },
-        label: {
-            normal: {
-                textStyle: {
-                    color: '#fff',
-                    fontSize: 40
-                }
-            }
-        }
-    }
-});
-option = {
-    globe: {
-        baseTexture: mapChart,
-        heightTexture: 'bathymetry_bw_composite_4k.jpg',
+  <head>
 
-        displacementScale: 0.1,
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        shading: 'realistic',
-        realisticMaterial: {
-            roughness: 0.8,
-            metalness: 0
-        },
+    <title>Main Page-MSBA7005 with HKMA</title>
 
-        postEffect: {
-            enable: true
-        },
-        temporalSuperSampling: {
-            enable: true
-        },
-        light: {
-            ambient: {
-                intensity: 0
-            },
-            main: {
-                intensity: 2,
-                shadow: true
-            },
-            ambientCubemap: {
-                texture: 'lake.hdr',
-                exposure: 1,
-                diffuseIntensity: 0.2
-            }
-        },
-        viewControl: {
-            animationDurationUpdate: 1000,
-            animationEasingUpdate: 'cubicInOut',
-            targetCoord: [116.46, 39.92],
-            autoRotate: false
-        }
-    },
-    series: []
-};
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-var regions = mapChart.getModel().getComponent('geo').coordinateSystem.regions;
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
-setInterval(function () {
-    var region = regions[Math.round(Math.random() * (regions.length - 1))];
-    myChart.setOption({
-        title: {
-            left: 'center',
-            top: 'center',
-            text: region.name,
-            textStyle: {
-                fontSize: 40
-            }
-        },
-        globe: {
-            viewControl: {
-                targetCoord: region.center
-            }
-        }
-    });
-    mapChart.setOption({
-        geo: {
-            regions: [{
-                name: region.name,
-                itemStyle: {
-                    normal: {
-                        areaColor: '#444'
-                    }
-                }
-            }]
-        }
-    })
-}, 2000);;
-if (option && typeof option === "object") {
-    myChart.setOption(option, true);
-}
-       </script>
-   </body>
+    <!-- Custom styles for this template -->
+    <link href="css/landing-page.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-light bg-light static-top">
+      <div class="container">
+        <a class="navbar-brand" href="http://www.hkma.gov.hk/eng/">HKU-MSBA7005 with HKMA</a>
+      </div>
+    </nav>
+
+    <!-- Masthead -->
+    <header class="masthead text-white text-center">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <h1 class="mb-5">Visualization and Prediction on OTC Markets in HK</h1>
+          </div>
+          <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+            <form>
+              <div class="form-row">
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Icons Grid -->
+    <section class="features-icons bg-light text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+              <div class="features-icons-icon d-flex">
+                <i class="icon-screen-desktop m-auto text-primary"></i>
+              </div>
+              <h3>Descriptive Analysis</h3>
+              <p class="lead mb-0">This Tableau dashboard will give you a general idea on what's happenning.</p>
+              <a href = "#" >Can I have a link here chiuyee?</a>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+              <div class="features-icons-icon d-flex">
+                <i class="icon-layers m-auto text-primary"></i>
+              </div>
+              <h3>Cash Flow Visualization</h3>
+              <p class="lead mb-0">Explore the global cash flow on a 3D "globe" and see the alerts.</p>
+              <a href = "lines3d-flights.html">See a Globe</a>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+              <div class="features-icons-icon d-flex">
+                <i class="icon-check m-auto text-primary"></i>
+              </div>
+              <h3>Prediction Demo</h3>
+              <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
+              <a href = "#" >Do you want to put it online?</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials text-center bg-light">
+      <div class="container">
+        <h2 class="mb-5">Our Team</h2>
+        <div class="row">
+          <div class="col-lg-2">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-1" src="img/testimonials-1.jpg" alt="">
+              <h5>Margaret E.</h5>
+              <p class="font-weight-light mb-0">"maybe say something here???"</p>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-1" src="img/testimonials-2.jpg" alt="">
+              <h5>Fred S.</h5>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-1" src="img/testimonials-3.jpg" alt="">
+              <h5>Sarah	W.</h5>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-1" src="img/testimonials-2.jpg" alt="">
+              <h5>Fred S.</h5>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-1" src="img/testimonials-2.jpg" alt="">
+              <h5>Fred S.</h5>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+              <img class="img-fluid rounded-circle mb-1" src="img/testimonials-2.jpg" alt="">
+              <h5>Fred S.</h5>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  
+    <!-- Footer -->
+    <footer class="footer bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+            <ul class="list-inline mb-2">
+              <li class="list-inline-item">
+                <a href="http://www.fbe.hku.hk/msba/">About</a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                <a href="http://www.fbe.hku.hk/msba/students/index.html">Contact</a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                <a href="#">Terms of Use</a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                <a href="#">Privacy Policy</a>
+              </li>
+            </ul>
+            <p class="text-muted small mb-4 mb-lg-0">&copy; Wenlan's Website 2018. All Rights Reserved.</p>
+          </div>
+          <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item mr-3">
+                <a href="#">
+                  <i class="fa fa-facebook fa-2x fa-fw"></i>
+                </a>
+              </li>
+              <li class="list-inline-item mr-3">
+                <a href="#">
+                  <i class="fa fa-twitter fa-2x fa-fw"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-instagram fa-2x fa-fw"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
 </html>

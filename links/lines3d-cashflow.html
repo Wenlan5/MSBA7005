@@ -24,21 +24,25 @@ var app = {};
 option = null;
 
 //read data from json file  
-$.getJSON('data/flights.json', function (data) {
+$.getJSON('data/cashflow.json', function (data) {
     var airports = data.airports.map(function (item) {
         return {
             coord: [item[3], item[4]]
         }
     });
     function getAirportCoord(idx) {
+        // 获取机场坐标
         return [data.airports[idx][3], data.airports[idx][4]];
     }
 
     // Route: [airlineIndex, sourceAirportIndex, destinationAirportIndex]
     var routesGroupByAirline = {};
     data.routes.forEach(function (route) {
+        // 要画图的是第几条航线
         var airline = data.airlines[route[0]];
+        // 第几条航线的机场名
         var airlineName = airline[0];
+        // routesGroupByAirline存取了key为机场名，value为routes的字典
         if (!routesGroupByAirline[airlineName]) {
             routesGroupByAirline[airlineName] = [];
         }
@@ -46,15 +50,20 @@ $.getJSON('data/flights.json', function (data) {
     });
 
     var pointsData = [];
+    // pointsData得到要画图的起始和终点的机场坐标
     data.routes.forEach(function (airline) {
+        // 获取起始点的机场坐标
         pointsData.push(getAirportCoord(airline[1]));
+        // 获取终点的机场坐标
         pointsData.push(getAirportCoord(airline[2]));
     });
 
 //??? HOW TO connect airlines with map???
 // viz routes as lines on the globe(trail+line effect here)
     var series = data.airlines.map(function (airline) {
+        // 要画的航线名
         var airlineName = airline[0];
+        // 航线名对应的路线
         var routes = routesGroupByAirline[airlineName];
 
         if (!routes) {
@@ -79,15 +88,18 @@ $.getJSON('data/flights.json', function (data) {
             blendMode: 'lighter', //该模式可以让数据集中的区域因为叠加而产生高亮的效果
 
 //??? HOW TO connect airlines with map???
+            // 要改的数据在这里
             data: routes.map(function (item) {
                 return [airports[item[1]].coord, airports[item[2]].coord];
             })
         };
     }).filter(function (series) {
+        // 筛选出有内容的series，null，undefined和空串都不会执行
         return !!series;
     });
 
 //scatter for airport
+// 画地球上的红点
     series.push({
         type: 'scatter3D',
         coordinateSystem: 'globe',
@@ -117,7 +129,7 @@ mapChart.setOption({
             color: ['#9C9C9C','#E8E8E8','#B5B5B5','#828282']
        }
     },
-
+    // 画地球上各个国家的颜色深浅
     series : [
         {
             type: 'map',

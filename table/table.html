@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="d3.min.js"></script>
+<style>
+    .light{
+        position: relative;
+        /*background: url('img/Light bulb (1).png') no-repeat center;*/
+        background: url('img/light 灯泡 (1).png') no-repeat center;
+        width: 60px;
+        height: 60px;
+        background-size: contain;
+    }
+    .light:after{
+        width: 60px;
+        /*height: 12px;*/
+        height: 19px;
+        content: '';
+        /*background: url('img/lightBottom.png') no-repeat center;*/
+        background: url('img/lightBottom2.png') no-repeat center;
+        background-size: contain;
+        position: absolute;
+        /*top: 80%;*/
+        top: 70%;
+    }
+    /*红色闪灯动画*/
+    .redBlink{
+        animation:redFlash 1s infinite;
+    }
+    @keyframes redFlash
+    {
+        0%   {background: url('img/light 灯泡 (1).png') no-repeat center ;
+            background-size: contain;}
+        100% {background: url('img/light 灯泡 (2).png') no-repeat center;
+            background-size: contain;}
+    }
+
+    @-webkit-keyframes redFlash /* Safari and Chrome */
+    {
+        0%   {background: url('img/light 灯泡 (1).png') no-repeat center;
+            background-size: contain;}
+        100% {background: url('img/light 灯泡 (2).png') no-repeat center;
+            background-size: contain;}
+    }
+
+    /*橙色闪灯动画*/
+    .orangeBlink{
+        animation:orangeFlash 1s infinite;
+    }
+    @keyframes orangeFlash
+    {
+        0%   {background: url('img/light 灯泡 (1).png') no-repeat center ;
+            background-size: contain;}
+        100% {background: url('img/light 灯泡 (3).png') no-repeat center;
+            background-size: contain;}
+    }
+
+    @-webkit-keyframes orangeFlash /* Safari and Chrome */
+    {
+        0%   {background: url('img/light 灯泡 (1).png') no-repeat center;
+            background-size: contain;}
+        100% {background: url('img/light 灯泡 (3).png') no-repeat center;
+            background-size: contain;}
+    }
+
+
+    /*黄色闪灯动画*/
+    .yellowBlink{
+        animation:yellowFlash 1s infinite;
+    }
+    @keyframes yellowFlash
+    {
+        0%   {background: url('img/light 灯泡 (1).png') no-repeat center ;
+            background-size: contain;}
+        100% {background: url('img/light 灯泡 (4).png') no-repeat center;
+            background-size: contain;}
+    }
+
+    @-webkit-keyframes yellowFlash /* Safari and Chrome */
+    {
+        0%   {background: url('img/light 灯泡 (1).png') no-repeat center;
+            background-size: contain;}
+        100% {background: url('img/light 灯泡 (4).png') no-repeat center;
+            background-size: contain;}
+    }
+
+
+    /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+    ::-webkit-scrollbar
+    {
+        width: 2px;
+        height: 2px;
+        background-color: #F5F5F5;
+    }
+
+    /*定义滚动条轨道 内阴影+圆角*/
+    ::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        background-color: #F5F5F5;
+    }
+
+    /*定义滑块 内阴影+圆角*/
+    ::-webkit-scrollbar-thumb
+    {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #555;
+    }
+</style>
+<body>
+<div id="tableContainer" >
+</div>
+</body>
+<script>
+    var data = [];
+    var monthList = ['January','February','March','April','May','June','July','August','September','October','November','December']
+    //数据生成格式
+
+    d3.csv("data.csv", function(d) {
+        var datacount = 0;
+        for(var i=0;i<12;i++){
+            var dataEach = [];
+
+            if(d[datacount]!=undefined){
+                dataEach.push(d[datacount].month);
+            }else{
+                dataEach.push(null);
+            }
+            for(var j=1;j<5;j++){
+                if(d[datacount]!=undefined){
+                    dataEach.push(parseInt(d[datacount].number));
+                }else{
+                    dataEach.push(0);
+                }
+                datacount++;
+            }
+            data.push(dataEach);
+        }
+
+        console.log(data);//打印数据
+        generateContainer(data,100,100);
+    })
+    /**
+     *  闪灯表格组件
+     * @param x 距离左侧距离
+     * @param y 距离右侧距离
+     * */
+    function generateContainer(data,x,y){
+        var container = document.getElementById('tableContainer');
+        container.setAttribute('style','position:absolute;display:flex;flex-direction:column;left:'+x+'px;top:'+y+'px;');
+        var title = document.createElement('h2');
+        title.setAttribute('style','text-align:center;');
+        title.innerHTML = 'OTC Transaltion By Week';
+        var main = document.createElement('div');
+        main.setAttribute('style','display:flex;');
+        generateTable(data,main,100,100,100);
+        //设置light容器
+        var light = document.createElement('div');
+        light.setAttribute('id','light');
+        light.classList.add('light');
+        main.appendChild(light);
+        container.appendChild(title);
+        container.appendChild(main);
+    }
+    /**
+     * 表格插件
+     * @param data 表单总数据
+     * @param container 容器
+     * @param eachCellWidth 每个单元格宽度
+     * @param eachCellWidthFirst 月份单元格宽度
+     * @param height 表单高度
+     * */
+    function generateTable(data,container,eachCellWidth,eachCellWidthFirst,height){
+
+        var table = document.createElement('table');
+//        table.setAttribute('style','position:absolute;left:'+left+'px;top:'+top+'px;');
+        var thead = document.createElement('thead');
+        thead.setAttribute('style','display: block;border:1px solid #dbdbdb;border-spacing: 0px;overflow-y:auto;border-radius: 10px 10px 0 0;');
+        var theadTr = document.createElement('tr');
+        var weeksColumn = ['2017-2018','week1','week2','week3','week4'];
+         for(var i=0;i<5;i++){
+             var theadTrTh = document.createElement('th');
+            if(i==0){//height为表头高度
+                theadTrTh.setAttribute('style','opacity:0.8;background:lightgrey;height:40px;border-right:1px solid #dbdbdb;width:'+eachCellWidthFirst+'px;min-width:'+eachCellWidthFirst+'px;max-width:'+eachCellWidthFirst+'px;');
+            }else if(i<4){
+                theadTrTh.setAttribute('style','opacity:0.8;background:lightgrey;height:40px;text-align:center;border-right:1px solid #dbdbdb;width:'+eachCellWidth+'px;min-width:'+eachCellWidth+'px;max-width:'+eachCellWidth+'px;');
+            }else{
+                theadTrTh.setAttribute('style','opacity:0.8;background:lightgrey;height:40px;text-align:center;width:'+eachCellWidth+'px;min-width:'+eachCellWidth+'px;max-width:'+eachCellWidth+'px;');
+            }
+             theadTrTh.innerHTML = weeksColumn[i];
+             theadTr.appendChild(theadTrTh);
+        }
+        thead.appendChild(theadTr);
+        table.appendChild(thead);
+        //设置表单主体 属性
+        var tbody = document.createElement('tbody');
+        tbody.setAttribute('style','display: block;border-left:1px solid #dbdbdb;border-right:1px solid #dbdbdb;border-bottom:1px solid #dbdbdb;border-spacing: 0px;overflow-y:auto;border-radius:0 0 10px 10px ;height:'+height+'px;')
+        for(var month=0;month<12;month++){
+            var trTemp = document.createElement('tr');
+            for(var week=0;week<5;week++){
+                var tdTemp = document.createElement('td');
+                if(week==0){
+                    tdTemp.setAttribute('style','border-radius:0 0 0 5px ;opacity:0.8;text-align:center;background:lightgrey;border-bottom:1px solid #dbdbdb;border-right:1px solid #dbdbdb;width:'+eachCellWidthFirst+'px;min-width:'+eachCellWidthFirst+'px;max-width:'+eachCellWidthFirst+'px;');
+                }else if(week<4){
+                    tdTemp.setAttribute('style','background: transparent;cursor:pointer;text-align:center;border-bottom:1px solid #dbdbdb;border-right:1px solid #dbdbdb;width:'+eachCellWidth+'px;min-width:'+eachCellWidth+'px;max-width:'+eachCellWidth+'px;');
+                    tdTemp.addEventListener('mouseover', function(){
+                        var average = 0;
+                        var curValue = parseInt(this.innerText);
+                        var cr = this.id.split('_');
+                        var row = cr[1];
+                        var column = cr[0];
+                        if(column>0){
+                            if(row==4){
+                                average = (data[column][row-3]+data[column][row-2]+data[column][row-1])/3;
+                            }else if(row==3){
+                                average = (data[column][row-2]+data[column][row-1]+data[column-1][4])/3;
+                            }else if(row==2){
+                                average = (data[column-1][4]+data[column-1][3]+data[column][row-1])/3;
+                            }else if(row==1){
+                                average = (data[column-1][4]+data[column-1][3]+data[column-1][2])/3;
+                            }
+                        }else{
+                            if(row==4){
+                                average = (data[column][row-3]+data[column][row-2]+data[column][row-1])/3;
+                            }else if(row==3){
+                                average = (data[column][row-2]+data[column][row-1])/2;
+                            }else if(row==2){
+                                average = data[column][row-1];
+                            }else if(row==1){
+                                average = curValue;
+                            }
+                        }
+                        document.getElementById('light').classList.remove("orangeBlink");
+                        document.getElementById('light').classList.remove("redBlink");
+                        document.getElementById('light').classList.remove("yellowBlink");
+                        //阈值比较
+                        if(Math.abs((curValue-average)/average)>=0.3){
+                            document.getElementById('light').classList.add('redBlink');
+                        }else if(Math.abs((curValue-average)/average)>0.1 && Math.abs((curValue-average)/average)<0.3){
+                            document.getElementById('light').classList.add('yellowBlink');
+                        }
+                    });
+                    tdTemp.addEventListener('mouseout', function(){
+                        document.getElementById('light').classList.remove("orangeBlink");
+                        document.getElementById('light').classList.remove("redBlink");
+                        document.getElementById('light').classList.remove("yellowBlink");
+                    });
+                }else{
+                    tdTemp.setAttribute('style','background: transparent;cursor:pointer;text-align:center;border-bottom:1px solid #dbdbdb;width:'+eachCellWidth+'px;min-width:'+eachCellWidth+'px;max-width:'+eachCellWidth+'px;');
+                }
+                tdTemp.setAttribute('id',month+'_'+week);
+                tdTemp.innerHTML = data[month][week];
+                trTemp.appendChild(tdTemp);
+            }
+            tbody.appendChild(trTemp);
+        }
+        table.appendChild(tbody);
+        container.appendChild(table);
+    }
+
+
+</script>
+</html>
